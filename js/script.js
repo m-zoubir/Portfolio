@@ -17,18 +17,41 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* Mobile nav toggle */
+/* Mobile nav toggle (Side Drawer) */
   const toggle = document.getElementById('nav-toggle');
   const nav = document.getElementById('main-nav');
+  const overlay = document.getElementById('nav-overlay');
+
+  function closeNav() {
+    if (nav) nav.classList.remove('open');
+    if (toggle) {
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = ''; // Restore page scrolling
+  }
+
   if (toggle && nav){
     toggle.addEventListener('click', () => {
       const isOpen = nav.classList.toggle('open');
+      toggle.classList.toggle('active', isOpen);
       toggle.setAttribute('aria-expanded', isOpen);
+      
+      if (overlay) overlay.classList.toggle('open', isOpen);
+      
+      // Prevent background scrolling when menu is open
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     });
+    
+    // Close drawer when clicking the dark overlay
+    if (overlay) {
+      overlay.addEventListener('click', closeNav);
+    }
+
+    // Close drawer when clicking any link
     nav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', closeNav);
     });
   }
 

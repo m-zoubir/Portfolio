@@ -361,18 +361,62 @@ h3{ font-size:1.15rem; font-weight:600; }
 }
 
 /* Tablet Portrait / Mobile Landscape Breakpoint */
+/* Tablet Portrait / Mobile Landscape Breakpoint */
 @media (max-width: 768px){
   .wrap { padding: 0 20px; }
   
-  /* Mobile Navigation Toggle */
-  .main-nav {
-    position: fixed; top: 72px; left: 0; right: 0; background: var(--surface);
-    flex-direction: column; align-items: flex-start; padding: 20px 32px 28px; gap: 16px;
-    border-bottom: 1px solid var(--border); transform: translateY(-8px);
-    opacity: 0; pointer-events: none; transition: .25s var(--ease);
+  /* --- SIDEBAR DRAWER CSS --- */
+  .nav-toggle { 
+    display: flex; 
+    position: relative; 
+    z-index: 100; /* Keep hamburger above the drawer */
   }
-  .main-nav.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-  .nav-toggle { display: flex; }
+  
+  /* Turn hamburger into X when open */
+  .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.active span:nth-child(2) { opacity: 0; }
+  .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .main-nav {
+    position: fixed; 
+    top: 0; right: 0; bottom: 0; 
+    width: 280px; max-width: 80vw; height: 100vh;
+    background: var(--surface);
+    flex-direction: column; align-items: flex-start; 
+    padding: 90px 32px 40px; gap: 24px;
+    border-left: 1px solid var(--border);
+    transform: translateX(100%); /* Start hidden off-screen to the right */
+    opacity: 1; pointer-events: none; 
+    transition: transform 0.3s var(--ease);
+    z-index: 90;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    overflow-y: auto;
+  }
+  
+  .main-nav.open { 
+    transform: translateX(0); /* Slide in */
+    pointer-events: auto; 
+  }
+
+  /* Dark background overlay */
+  .nav-overlay {
+    position: fixed; inset: 0;
+    background: rgba(11, 17, 32, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 80; opacity: 0; pointer-events: none;
+    transition: opacity 0.3s var(--ease);
+  }
+  .nav-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .lang-switch {
+    margin-top: auto; /* Pushes the language switcher to the bottom */
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  /* -------------------------- */
   
   /* Grids to Single Column */
   .skills-grid, .projects-grid, .community-grid { grid-template-columns: 1fr; }
