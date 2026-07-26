@@ -421,3 +421,57 @@ h3{ font-size:1.15rem; font-weight:600; }
   
   .footer-bottom { flex-direction: column; text-align: center; }
 }
+
+
+/* =========================================================
+   LANGUAGE SWITCHER SYSTEM
+========================================================= */
+
+/* Hide French text when language is English */
+body[data-lang="en"] .fr {
+  display: none !important;
+}
+
+/* Hide English text when language is French */
+body[data-lang="fr"] .en {
+  display: none !important;
+}
+
+/* Style for the Language Toggle buttons in header */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 20px;
+  background: var(--surface);
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-btn.active {
+  background: var(--green);
+  color: var(--bg);
+}
+.lang-btn:not(.active):hover {
+  color: var(--text);
+}
+
+/* Adjust nav for mobile to accommodate the new button */
+@media (max-width: 768px){
+  .lang-switch {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}

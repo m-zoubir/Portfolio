@@ -96,3 +96,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+
+/* =========================================================
+   LANGUAGE SWITCHER LOGIC
+========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const langBtnEn = document.getElementById('btn-en');
+  const langBtnFr = document.getElementById('btn-fr');
+
+  function setLanguage(lang) {
+    // 1. Update the data attribute on the body (which triggers CSS changes)
+    document.body.setAttribute('data-lang', lang);
+    
+    // 2. Update active states on buttons
+    if (lang === 'fr') {
+      langBtnFr.classList.add('active');
+      langBtnEn.classList.remove('active');
+    } else {
+      langBtnEn.classList.add('active');
+      langBtnFr.classList.remove('active');
+    }
+    
+    // 3. Save preference to LocalStorage
+    localStorage.setItem('maz_portfolio_lang', lang);
+  }
+
+  if (langBtnEn && langBtnFr) {
+    langBtnEn.addEventListener('click', () => setLanguage('en'));
+    langBtnFr.addEventListener('click', () => setLanguage('fr'));
+    
+    // Check if user has a saved preference, otherwise default to English
+    const savedLang = localStorage.getItem('maz_portfolio_lang') || 'en';
+    setLanguage(savedLang);
+  }
+});
