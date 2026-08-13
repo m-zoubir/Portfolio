@@ -5,7 +5,7 @@
    placeholder with the expected label (see CSS .is-empty).
 ========================================================= */
 function mediaFallback(img){
-  const wrap = img.closest('.media');
+  const wrap = img.closest('.media, .doc-preview');
   if (wrap){ wrap.classList.add('is-empty'); }
   img.remove();
 }
@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* Mobile nav toggle */
-/* Mobile nav toggle (Side Drawer) */
+  /* Mobile nav toggle (Side Drawer) */
   const toggle = document.getElementById('nav-toggle');
   const nav = document.getElementById('main-nav');
   const overlay = document.getElementById('nav-overlay');
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
       toggle.setAttribute('aria-expanded', 'false');
     }
     if (overlay) overlay.classList.remove('open');
-    document.body.style.overflow = ''; // Restore page scrolling
+    document.body.style.overflow = ''; 
   }
 
   if (toggle && nav){
@@ -40,16 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (overlay) overlay.classList.toggle('open', isOpen);
       
-      // Prevent background scrolling when menu is open
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
     
-    // Close drawer when clicking the dark overlay
     if (overlay) {
       overlay.addEventListener('click', closeNav);
     }
 
-    // Close drawer when clicking any link
     nav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', closeNav);
     });
@@ -92,15 +88,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   revealTargets.forEach(el => io.observe(el));
 
-  /* Lightbox for media images that loaded successfully */
+  /* =========================================================
+     LIGHTBOX (Updated to include .doc-preview)
+  ========================================================= */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxClose = document.getElementById('lightbox-close');
 
-  document.querySelectorAll('.media').forEach(mediaEl => {
-    mediaEl.addEventListener('click', () => {
-      const img = mediaEl.querySelector('img');
-      if (!img) return; // placeholder, nothing to enlarge
+  // Listen for clicks on both .media elements and .doc-preview elements
+  document.querySelectorAll('.media, .doc-preview').forEach(el => {
+    el.addEventListener('click', (e) => {
+      // Prevent navigation if the element happened to be a link
+      e.preventDefault(); 
+      
+      const img = el.querySelector('img');
+      if (!img) return; // if it's an empty placeholder, do nothing
+      
       lightboxImg.src = img.src;
       lightboxImg.alt = img.alt;
       lightbox.classList.add('open');
@@ -120,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-
 /* =========================================================
    LANGUAGE SWITCHER LOGIC
 ========================================================= */
@@ -129,10 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const langBtnFr = document.getElementById('btn-fr');
 
   function setLanguage(lang) {
-    // 1. Update the data attribute on the body (which triggers CSS changes)
     document.body.setAttribute('data-lang', lang);
     
-    // 2. Update active states on buttons
     if (lang === 'fr') {
       langBtnFr.classList.add('active');
       langBtnEn.classList.remove('active');
@@ -141,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
       langBtnFr.classList.remove('active');
     }
     
-    // 3. Save preference to LocalStorage
     localStorage.setItem('maz_portfolio_lang', lang);
   }
 
@@ -149,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
     langBtnEn.addEventListener('click', () => setLanguage('en'));
     langBtnFr.addEventListener('click', () => setLanguage('fr'));
     
-    // Check if user has a saved preference, otherwise default to English
     const savedLang = localStorage.getItem('maz_portfolio_lang') || 'en';
     setLanguage(savedLang);
   }
